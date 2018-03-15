@@ -1,0 +1,93 @@
+{
+  "xsl:stylesheet": {
+    "-xmlns:xsl": "http://www.w3.org/1999/XSL/Transform",
+    "-version": "1.0",
+    "xsl:template": [
+      { "-match": "//ontologia" },
+      {
+        "-match": "ideal",
+        "xsl:apply-templates": [
+          { "-select": "atributos" },
+          { "-select": "metodos" }
+        ]
+      },
+      {
+        "-match": "atributos",
+        "xsl:apply-templates": { "-select": "atributo" }
+      },
+      {
+        "-match": "atributo",
+        "#text": [
+          " 
+  var ",
+          "; "
+        ],
+        "xsl:value-of": { "-select": "@nbatributo" }
+      },
+      {
+        "-match": "metodos",
+        "xsl:apply-templates": { "-select": "metodo" }
+      },
+      {
+        "-match": "metodo",
+        "#text": [
+          "function ",
+          "()  {",
+          "}
+"
+        ],
+        "xsl:value-of": { "-select": "@nbmetodo" },
+        "xsl:apply-templates": [
+          { "-select": "asignacion" },
+          { "-select": "decision" }
+        ]
+      },
+      {
+        "-match": "asignacion",
+        "xsl:value-of": [
+          { "-select": "variable" },
+          { "-select": "operando" }
+        ],
+        "#text": [
+          " =
+  ",
+          ";"
+        ]
+      },
+      {
+        "-match": "decision",
+        "#text": [
+          "
+  if (",
+          ")
+  "
+        ],
+        "xsl:value-of": { "-select": "condicion" },
+        "xsl:apply-templates": [
+          { "-select": "verdadero" },
+          { "-select": "falso" }
+        ]
+      },
+      {
+        "-match": "verdadero",
+        "#text": [
+          "
+  { ",
+          " }
+"
+        ],
+        "xsl:apply-templates": { "-select": "metodo" }
+      },
+      {
+        "-match": "falso",
+        "#text": [
+          "
+ else { ",
+          " }
+"
+        ],
+        "xsl:apply-templates": { "-select": "metodo" }
+      }
+    ]
+  }
+}
